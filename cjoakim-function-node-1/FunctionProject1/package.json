@@ -1,0 +1,19 @@
+{
+  "name": "cjoakim-function-node-1",
+  "version": "0.1.0",
+  "description": "sample node.js azure function with devops",
+  "dependencies": {
+    "redis": "^2.7.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-develop": "^0.4.0",
+    "load-grunt-tasks": "^5.1.0"
+  },
+  "scripts": {
+    "start": "func start"
+  },
+  "engines": {
+    "node": ">= 8.11.1"
+  }
+}

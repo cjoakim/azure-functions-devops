@@ -1,0 +1,75 @@
+# Azure DevOps Pipeline to build and deploy a Node.js Containerized Azure Function.
+# Chris Joakim, Microsoft, 2019/10/23
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: regular-variable-group
+
+steps:
+- script: |
+    echo 'DOCKER_ID:              '$(DOCKER_ID)
+    echo 'IMAGE_NAME:             '$(IMAGE_NAME)
+    echo 'AZURE-ACR-NAME:         '$(AZURE-ACR-NAME)
+    echo 'AZURE-ACR-USER-NAME:    '$(AZURE-ACR-USER-NAME)
+    echo 'AZURE-ACR-USER-PASS:    '$(AZURE-ACR-USER-PASS)
+  displayName: 'display the pipeline variables'
+  condition: always()
+
+- script: pwd
+  displayName: 'pwd'
+
+- script: ls -alR
+  displayName: 'ls -alR'
+
+- script: node --version
+  workingDirectory: FunctionProject1
+  displayName: 'node --version'
+
+- script: npm --version
+  workingDirectory: FunctionProject1
+  displayName: 'npm --version'
+
+- script: npm install
+  workingDirectory: FunctionProject1
+  displayName: 'npm install'
+
+- script: npm outdated
+  workingDirectory: FunctionProject1
+  displayName: 'npm outdated'
+
+- script: grunt
+  workingDirectory: FunctionProject1
+  displayName: 'execute grunt to create build_timestamp.json'
+
+- script: docker images
+  displayName: 'docker images - before build'
+
+- script: docker build -f Dockerfile -t $(DOCKER_ID)/$(IMAGE_NAME) .
+  workingDirectory: FunctionProject1
+  displayName: 'docker build'
+  
+- script: docker tag $(DOCKER_ID)/$(IMAGE_NAME) $(AZURE-ACR-NAME).azurecr.io/$(IMAGE_NAME)
+  workingDirectory: FunctionProject1
+  displayName: 'docker tag'
+
+- script: docker images
+  workingDirectory: FunctionProject1
+  displayName: 'docker images - after build and tagging'
+
+- script:   az acr login -n $(AZURE-ACR-NAME) -u $(AZURE-ACR-USER-NAME) -p $(AZURE-ACR-USER-PASS)
+  workingDirectory: FunctionProject1
+  displayName: 'ACR login'
+
+- script: docker push $(AZURE-ACR-NAME).azurecr.io/$(IMAGE_NAME)
+  workingDirectory: FunctionProject1
+  displayName: 'docker push to ACR'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- script: az acr repository list -n $(AZURE-ACR-NAME) -u $(AZURE-ACR-USER-NAME) -p $(AZURE-ACR-USER-PASS) --output table
+  workingDirectory: FunctionProject1
+  displayName: 'ACR repository list'
