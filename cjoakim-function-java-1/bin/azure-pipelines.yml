@@ -1,0 +1,77 @@
+# Azure DevOps Pipeline to build and deploy a Java Azure Function.
+# See https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-java-maven
+# See https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/java-function?view=azure-devops
+# Chris Joakim, Microsoft, 2019/10/21
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  appName: cjoakimfunctionjava1
+  serviceConnectionToAzure: connection-to-cjoakimfunctionjava1
+
+steps:
+- script: |
+    echo 'appName:                         '$(appName)
+    echo 'serviceConnectionToAzure:        '$(serviceConnectionToAzure)
+    echo 'system.defaultworkingdirectory:  '$(system.defaultworkingdirectory)
+    echo 'build.artifactstagingdirectory:  '$(build.artifactstagingdirectory)
+  displayName: 'display the pipeline variables'
+  condition: always()
+  # Logged values shown below:
+  # appName:                         cjoakimfunctionjava1
+  # serviceConnectionToAzure:        connection-to-cjoakimfunctionjava1
+  # system.defaultworkingdirectory:  /home/vsts/work/1/s
+  # build.artifactstagingdirectory:  /home/vsts/work/1/a
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CopyFiles@2
+  displayName: Copy Files
+  inputs:
+    SourceFolder: $(system.defaultworkingdirectory)/target/azure-functions/
+    Contents: '**'
+    TargetFolder: $(build.artifactstagingdirectory)   
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact
+  inputs:
+    PathtoPublish: $(build.artifactstagingdirectory)    
+
+- script: pwd
+  displayName: 'show pwd'
+  condition: always()
+  # Logged value shown below:
+  # /home/vsts/work/1/s
+
+- script: ls -alR
+  displayName: 'list files'
+  condition: always()
+  # Logged values include the following:
+  # ./target:
+  # -rw-r--r--  1 vsts docker 4902 Oct 19 12:11 com.cjoakim.functions.java1.function-1.0-SNAPSHOT.jar
+  # ./target/azure-functions/cjoakimfunctionjava1:
+  # -rw-r--r-- 1 vsts docker 4902 Oct 19 12:11 com.cjoakim.functions.java1.function-1.0-SNAPSHOT.jar
+  # -rw-r--r-- 1 vsts docker  136 Oct 19 12:11 host.json
+  # drwxr-xr-x 2 vsts docker 4096 Oct 19 12:11 HttpTrigger-Java
+
+- task: AzureFunctionApp@1
+  displayName: Azure Function App deploy
+  inputs:
+    azureSubscription: $(serviceConnectionToAzure)
+    appType: functionApp
+    appName: $(appName)
+    package: $(build.artifactstagingdirectory)/$(appName)
+    
