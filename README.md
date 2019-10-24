@@ -15,12 +15,12 @@
 
 ## [Local Workstation Setup](local-workstation.md) 
 
-## [Implement an Azure Function with Java and DevOps](cjoakim-function-java-1/)
+## [Implement an Azure Function with Java and DevOps](java-function.md)
 
 - [Java Function Creation and Testing](java-function.md) 
 - See project **cjoakim-function-java-1** in my Azure DevOps, code in subdirectory [cjoakim-function-java-1](cjoakim-function-java-1/)
 
-## [Implement an Azure Function with Node.js, Containers, and DevOps](cjoakim-function-node-1/)
+## [Implement an Azure Function with Node.js, Containers, and DevOps](node-function.md)
 
 - [Node.js Function Creation and Testing](node-function.md) 
 - See project **cjoakim-function-node-1** in my Azure DevOps, code in subdirectory [cjoakim-function-node-1](cjoakim-function-node-1/)
