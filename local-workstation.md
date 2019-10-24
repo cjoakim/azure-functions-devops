@@ -2,8 +2,8 @@
 
 ## Setup
 
-It is assumed that you have Node.js, Java 8, and the Azure CLI installed.
-Then install the Azure Function runtime, and login to Azure with the CLI.
+It is assumed that you have **Node.js**, **Java 8**, and the **Azure** CLI installed.
+Then install the **Azure Function runtime**, and login to Azure with the CLI.
 
 [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
