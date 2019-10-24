@@ -129,6 +129,8 @@ is running:
 
 ![node-func-app-started](img/node-func-app-started-localhost.png)
 
+---
+
 Invoke the generated HttpTrigger with curl:
 ```
 $ curl "http://localhost:8080/api/HttpTrigger?name=x"
@@ -190,7 +192,11 @@ PowerShell, or ARM templates.
 
 ![create1](img/create-node-function-app-1.png)
 
+---
+
 ![create2](img/create-node-function-app-2.png)
+
+---
 
 ![create3](img/create-node-function-app-3.png)
 
@@ -201,6 +207,8 @@ Get the URL of the Function, with it's authorization code.  Click the **Get Func
 and copy the URL from the popup that appears.
 
 ![geturl](img/configure-node-function-get-url.png)
+
+---
 
 ```
 $ curl -v "https://cjoakimfunctionnode1.azurewebsites.net/api/HttpTrigger?code=xfv...==&name=Miles"
@@ -225,13 +233,19 @@ Function App Main View; click 'Function app settings'.
 
 ![configure1](img/configure-node-function-app-1.png)
 
+---
+
 Settings View; click the 'Platform Features' tab.
 
 ![configure2](img/configure-node-function-app-2.png)
 
+---
+
 Platform Features View, click the 'Container Settings' link.
 
 ![configure3](img/configure-node-function-app-3.png)
+
+---
 
 Container Settings View; click 'On' then 'Save'.
 
@@ -255,6 +269,8 @@ two **environment variables** on your local system and in the Azure Function App
 - AZURE_REDISCACHE_KEY
 
 ![function-app-env-vars](img/node-function-environment-variables.png)
+
+---
 
 See the [index.js](cjoakim-function-node-1/FunctionProject1/HttpTrigger/index.js) Function code.
 

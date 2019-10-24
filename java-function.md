@@ -14,11 +14,17 @@
 Create a new DevOps project for your Function:
 ![devops-create](img/devops-create-cjoakim-function-java-1.png)
 
+---
+
 The Project is empty, but a repo is available:
 ![devops-empty](img/devops-empty-cjoakim-function-java-1.png)
 
+---
+
 Get the URL of the Azure DevOps Repo for your Project:
 ![devops-repo](img/devops-repo-cjoakim-function-java-1.png)
+
+---
 
 Clone the repo to your workstation:
 ```
@@ -210,14 +216,22 @@ First, create a new DevOps pipeline per the following four screen shots:
 Click 'New Pipeline'.
 ![pipeline1](img/new-java-pipeline-1.png)
 
+---
+
 Select 'Azure Repos Git YAML'.
 ![pipeline2](img/new-java-pipeline-2.png)
+
+---
 
 Select the Azure Repository.
 ![pipeline3](img/new-java-pipeline-3.png)
 
+---
+
 Run the Pipeline, it should fail, because a **Service Connection** has not net been defined.
 ![pipeline4](img/new-java-pipeline-4.png)
+
+---
 
 Define the **Service Connection** between your DevOps project and your Function App.  This
 creates a Service Principal on your behalf.
