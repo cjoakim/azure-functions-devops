@@ -2,9 +2,13 @@
 
 ## Generation
 
+Simply use the Maven **mvn archetype:generate...** command, as in this script.
 ```
 $ ./create-function.sh
 ```
+
+This **generates a standard Maven project**, with a pom.xml file and the standard
+Maven directory structure.
 
 ## Enhance the Generated Code
 
@@ -18,11 +22,11 @@ Added the following to pom.xml
 ```
 
 See the edited code in file:
-src/main/java/com/cjoakim/functions/java1/Function.java
+**src/main/java/com/cjoakim/functions/java1/Function.java**
 
 ## Testing Locally
 
-Fun the Functions Runtime in one terminal window:
+Again, simply use Maven to compile and execute the Function locally.
 ```
 $ ./run-local-function.sh
 ```
@@ -67,3 +71,9 @@ Invoke the deployed Function with curl:
 $ curl "https://cjoakimfunctionjava1.azurewebsites.net/api/HttpTrigger-Java?code=ReR...==&type=address"
 52082 Hodkiewicz Prairie, East Ervin, Canada
 ```
+
+## Deploy with Azure DevOps
+
+See the **azure-pipelines.yml** in at the root of the repo.
+
+The DevOps pipeline code is co-resident with the Function code itself.

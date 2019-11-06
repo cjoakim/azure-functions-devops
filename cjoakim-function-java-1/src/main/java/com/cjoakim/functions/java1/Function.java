@@ -54,7 +54,8 @@ public class Function {
                 sb.append(faker.address().buildingNumber() + " ");
                 sb.append(faker.address().streetName() + ", ");
                 sb.append(faker.address().city() + ", ");
-                sb.append(faker.address().country());
+                sb.append(faker.address().country() + ", ");
+                sb.append("Earth");
                 data.put("result",  sb.toString());
                 break;
             default :
