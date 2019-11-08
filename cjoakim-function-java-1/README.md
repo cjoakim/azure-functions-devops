@@ -1,5 +1,14 @@
 # Java Function: cjoakim-function-java-1
 
+This repository is the **private** Azure DevOps repo.
+
+A **public** version of this repo is here: https://github.com/cjoakim/azure-functions-devops
+
+Other DevOps & Docker GitHub repos of interest:
+- https://github.com/cjoakim/azure-devops-node-web-1g  (diagram)
+- https://github.com/cjoakim/azure-springboot-devops
+
+
 ## Generation
 
 Simply use the Maven **mvn archetype:generate...** command, as in this script.
@@ -10,14 +19,44 @@ $ ./create-function.sh
 This **generates a standard Maven project**, with a pom.xml file and the standard
 Maven directory structure.
 
+This script essentially runs the following:
+```
+mvn archetype:generate \
+    -DarchetypeGroupId=com.microsoft.azure \
+    -DarchetypeArtifactId=azure-functions-archetype \
+    -DappName=$APP_NAME \
+    -DappRegion=$REGION \
+    -DresourceGroup=$RG \
+    -DgroupId=com.$PKG.group \
+    -DartifactId=$PKG.function \
+    -Dpackage=$PKG
+    -DinteractiveMode=false
+```
+
 ## Enhance the Generated Code
 
-Added the following to pom.xml
+Added the following to **pom.xml** - the **javafaker** and **jackson json** libraries.
 ```
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>1.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.10.1</version>
         </dependency>
 ```
 
@@ -31,10 +70,20 @@ Again, simply use Maven to compile and execute the Function locally.
 $ ./run-local-function.sh
 ```
 
+This script essentially runs the following:
+```
+mvn clean package
+mvn azure-functions:run
+```
+
 Invoke the Function with curl in another terminal window:
 ```
-$ curl http://localhost:7071/api/HttpTrigger-Java?type=address
-01790 Edward Pike, Jeaneneside, Japan
+$ curl "http://localhost:7071/api/HttpTrigger-Java?type=address" | jq
+{
+  "result": "12140 Jacquline Glen, Haagville, Honduras",
+  "type": "address",
+  "version": "2019/11/08 11:03 EST"
+}
 ```
 
 ## Deploy to Azure 
@@ -68,8 +117,13 @@ $ mvn azure-functions:deploy
 
 Invoke the deployed Function with curl:
 ```
-$ curl "https://cjoakimfunctionjava1.azurewebsites.net/api/HttpTrigger-Java?code=ReR...==&type=address"
-52082 Hodkiewicz Prairie, East Ervin, Canada
+curl "https://cjoakimfunctionjava1.azurewebsites.net/api/HttpTrigger-Java?code=ReR...==&type=address" | jq
+
+{
+  "result": "189 Jose Mission, Port Shannan, Lebanon",
+  "type": "address",
+  "version": "2019/11/08 11:03 EST"
+}
 ```
 
 ## Deploy with Azure DevOps

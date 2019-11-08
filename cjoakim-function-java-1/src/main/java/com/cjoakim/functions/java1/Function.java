@@ -13,7 +13,7 @@ import com.github.javafaker.*;  // <-- generates random Address values
  * Sample Azure Function with a HTTP Trigger, using a 3rd party Maven Central jar.
  * Generates a random Address, or parts thereof, given a 'type' HTTP parameter.
  * See https://docs.microsoft.com/en-us/java/api/com.microsoft.azure.functions?view=azure-java-stable
- * Chris Joakim, Microsoft, 2019/10/23
+ * Chris Joakim, Microsoft, 2019/11/08
  */
 public class Function {
 
@@ -54,14 +54,13 @@ public class Function {
                 sb.append(faker.address().buildingNumber() + " ");
                 sb.append(faker.address().streetName() + ", ");
                 sb.append(faker.address().city() + ", ");
-                sb.append(faker.address().country() + ", ");
-                sb.append("Earth");
+                sb.append(faker.address().country());
                 data.put("result",  sb.toString());
                 break;
             default :
+        }
+        data.put("version", "2019/11/08 11:08 EST");
 
-         }
-        
         if (data.get("result").length() < 1) {
             data.put("error", "please pass a 'type' on the query string or in the request body");
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
